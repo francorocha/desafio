@@ -139,3 +139,56 @@ a.custom-card:hover {
 .checked {
   color: orange;
 }
+
+@import "bourbon";
+
+.text_center{
+  background: #eee !important;
+  text-align: center!important;
+}
+
+.principal {	
+	margin-top: 80px;
+  margin-bottom: 80px;
+  width: 100%;
+  max-width: 330px;
+  padding: 15px;
+  margin: auto;
+}
+
+.formulario {
+  
+}
+.titulo,
+.checkbox {
+  margin-bottom: 30px;
+}
+
+.checkbox {
+  font-weight: normal;
+}
+
+.datos {
+  position: relative;
+  border-radius: 5%;
+  font-size: 16px;
+  height: auto;
+  padding: 10px;
+	@include box-sizing(border-box);
+
+	&:focus {
+	  z-index: 2;
+	}
+}
+
+#email[type="text"] {
+  margin-bottom: -1px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+#pass[type="password"] {
+  margin-bottom: 20px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
