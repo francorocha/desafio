@@ -14,51 +14,50 @@
   <link href="css/bootstrap.min.css" rel="stylesheet">
   <link href="css/styles.css" rel="stylesheet">
   <style>
-    html, body{
-      height: 100%;
-    }
+    
+    html,
+        body {
+            height: 100%;
+        }
 
-    body {
-      display: -ms-flexbox;
-      display: flex;
-      -ms-flex-align: center;
-      align-items: center;
-      padding-top: 40px;
-      padding-bottom: 40px;
-      background-color: #f5f5f5;
-    }
-
-    .signin {
-      width: 100%;
-      max-width: 330px;
-      padding: 15px;
-      margin: auto;
-    }
+        body {
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex-align: center;
+            align-items: center;
+            padding-top: 40px;
+            padding-bottom: 40px;
+            background-color: #f5f5f5;
+            background: rgb(236, 237, 238);
+            background: linear-gradient(90deg, rgba(236, 237, 238, 1) 37.5%, rgba(247, 248, 248, 1) 64.5%);
+        }
+    
   </style>
 </head>
 
-<body class="text-center">
-  <div class="principal">
-    <form action="index.html" method="GET" onsubmit="sumar();" id="form" class="formulario">       
-      <img src="img/login.png" alt="imagen" width="350" height="150" style="border-radius: 5%;">
-      <h2 class="titulo">Por favor, registrarse</h2>
-      <input type="text" id="email" class="datos" name="username" placeholder="Email" required="" autofocus="" />
-      <br>
-      <input type="password" id="pass" class="datos" name="password" placeholder="Contraseña" required=""/>
-      <br>      
-      <label class="checkbox">
-        <input type="checkbox" value="remember-me" id="recordar" name="rememberMe"> Recuérdame
-      </label>
-      <button class="btn btn-lg btn-primary btn-block" type="submit">Iniciar sesión</button>  
-      <p>© 2020</p> 
-    </form>
+<body >
+  <div style="margin:auto">
+    <img class="signin_img" src="img/login.png" alt="Imagen Login">
+    <div class="signin">
+      <form id="form" action="index.html">
+        <div class="signin_items">
+          <div class="input-group mb-3">
+            <input type="email" id="email" class="form-control" placeholder="Email" required>
+          </div>
+          <div class="input-group mb-3">
+            <input type="password" id="pwd" class="form-control" placeholder="Constraseña" required>
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <input type="checkbox" id="chk_remember" data-toggle="popover" data-trigger="hover" data-content="Guardar credenciales">
+              </div>
+            </div>
+          </div>
+          <button id="btn_ingresar" class="btn btn-primary btn-lg btn-block">Ingresar</button>
+          <button class="btn btn-secondary btn-sm btn-block">Registrarme</button>
+        </div>
+      </form>
+    </div>
   </div>
-  <script>
-    function sumar(){
-      localStorage.setItem("contador", 1);
-    }
-  </script>
-
   <script src="js/init.js"></script>
   <script src="js/login.js"></script>
 </body>
