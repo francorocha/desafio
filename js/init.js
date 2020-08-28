@@ -65,4 +65,7 @@ if (sessionStorage.getItem('usuario') != null && getFileName() == "login.html") 
 //que el documento se encuentra cargado, es decir, se encuentran todos los
 //elementos HTML presentes.
 document.addEventListener("DOMContentLoaded", function(e){
+  if(getFileName() != "login.html"){
+    document.getElementById("dropdown_perfil").innerHTML = sessionStorage.getItem("usuario");
+  }
 });
