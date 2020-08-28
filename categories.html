@@ -13,6 +13,11 @@
 
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/styles.css" rel="stylesheet">
+    <style>
+      #cerrarSesion:hover, #showEmail:hover {
+          text-decoration: underline;
+        }
+    </style>
   </head>
   <body>
     <nav class="site-header sticky-top py-1 bg-dark">
@@ -22,29 +27,57 @@
         <a class="py-2 d-none d-md-inline-block" href="products.html">Productos</a>
         <a class="py-2 d-none d-md-inline-block" href="sell.html">Vender</a>
         <a class="py-2 d-none d-md-inline-block" href="cart.html">Mi carrito</a>
+        <div class="btn-group">
+          <button id="showEmail" class="py-2 d-none d-md-inline-block dropdown-toggle" type="button" data-toggle="dropdown" style="width: 180px; background-color: #343a40; color: white; border-style: hidden;">
+            <script>
+              let htmlContentToAppend = "";
+              if (localStorage.getItem('usuario') != null) {
+                htmlContentToAppend += `
+              <span> ` + localStorage.getItem("usuario") + ` </span>
+              `
+              }else{
+                htmlContentToAppend += `
+              <span> ` + sessionStorage.getItem("usuario") + ` </span>
+              `
+              }
+              document.getElementById("showEmail").innerHTML = htmlContentToAppend;
+            </script>
+          </button>
+  
+          <ul class="dropdown-menu">
+            <button id="cerrarSesion" class="py-2 d-none d-md-inline-block" style="width: 178px; background-color: white; color: #343a40; border-style: hidden;" onclick="cerrar()">Cerrar sesión</button>
+          </ul>
+        </div>
       </div>
     </nav>
+    <script type="text/javascript">
+      function cerrar(){
+          localStorage.clear();
+          sessionStorage.clear();
+          location.href="login.html";
+       }
+    </script>
     <main role="main" class="pb-5">
         <div class="text-center p-4">
             <h2>Categorías</h2>
             <p class="lead">Verás aquí todas las categorías del sitio.</p>
         </div>
         <div class="container">
-            <div class="row">
-                <div class="col text-right">
-                    <div class="btn-group btn-group-toggle mb-4" data-toggle="buttons">
-                        <label class="btn btn-light active" id="sortAsc" >
-                            <input type="radio" name="options" autocomplete="off" checked>A-Z
-                        </label>
-                        <label class="btn btn-light" id="sortDesc" >
-                            <input type="radio" name="options" autocomplete="off">Z-A
-                        </label>
-                        <label class="btn btn-light" id="sortByCount" >
-                            <input type="radio" name="options" autocomplete="off"><i class="fas fa-sort-amount-down mr-1"></i>Cant.
-                        </label>
-                    </div>
+          <div class="row">
+            <div class="col text-right">
+                <div class="btn-group btn-group-toggle mb-4" data-toggle="buttons">
+                    <label class="btn btn-light active" id="sortAsc" >
+                        <input type="radio" name="options" autocomplete="off" checked>A-Z
+                    </label>
+                    <label class="btn btn-light" id="sortDesc" >
+                        <input type="radio" name="options" autocomplete="off">Z-A
+                    </label>
+                    <label class="btn btn-light" id="sortByCount" >
+                        <input type="radio" name="options" autocomplete="off"><i class="fas fa-sort-amount-down mr-1"></i>Cant.
+                    </label>
                 </div>
             </div>
+        </div>
             <div class="row justify-content-end">
               <div class="col-md-6"></div>
                 <div class="col-md-6 col-sm-12 mb-1 container">
