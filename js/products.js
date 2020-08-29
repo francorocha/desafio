@@ -1,138 +1,162 @@
-<!DOCTYPE html>
-<!-- saved from url=(0049)https://getbootstrap.com/docs/4.3/examples/album/ -->
-<html lang="en">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <title>eMercado - Todo lo que busques está aquí</title>
+const ORDER_ASC_BY_NAME = "AZ";
+const ORDER_ASC_BY_COST = "$UP";
+const ORDER_DESC_BY_COST = "$DW";
+const ORDER_BY_PROD_COUNT = "Rel.";
+var currentProductsArray = [];
+var currentSortCriteria = undefined;
+var minCount = undefined;
+var maxCount = undefined;
+var texto = undefined; 
 
-    <link rel="canonical" href="https://getbootstrap.com/docs/4.3/examples/album/">
-    <link href="https://fonts.googleapis.com/css?family=Raleway:300,300i,400,400i,700,700i,900,900i" rel="stylesheet">
-    <link href="css/font-awesome.min.css" rel="stylesheet">
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/styles.css" rel="stylesheet">
-    <style>
-      #cerrarSesion:hover, #showEmail:hover {
-          text-decoration: underline;
-        }
-    </style>
-  </head>
-  <body>
-    <nav class="site-header sticky-top py-1 bg-dark">
-      <div class="container d-flex flex-column flex-md-row justify-content-between">
-        <a class="py-2 d-none d-md-inline-block" href="index.html">Inicio</a>
-        <a class="py-2 d-none d-md-inline-block" href="categories.html">Categorías</a>
-        <a class="py-2 d-none d-md-inline-block" href="products.html">Productos</a>
-        <a class="py-2 d-none d-md-inline-block" href="sell.html">Vender</a>
-        <a class="py-2 d-none d-md-inline-block" href="cart.html">Mi carrito</a>
-        <div class="btn-group">
-          <button id="showEmail" class="py-2 d-none d-md-inline-block dropdown-toggle" type="button" data-toggle="dropdown" style="width: 180px; background-color: #343a40; color: white; border-style: hidden;">
-            <script>
-              let htmlContentToAppend = "";
-              if (localStorage.getItem('usuario') != null) {
-                htmlContentToAppend += `
-              <span> ` + localStorage.getItem("usuario") + ` </span>
-              `
-              }else{
-                htmlContentToAppend += `
-              <span> ` + sessionStorage.getItem("usuario") + ` </span>
-              `
-              }
-              document.getElementById("showEmail").innerHTML = htmlContentToAppend;
-            </script>
-          </button>
-  
-          <ul class="dropdown-menu">
-            <button id="cerrarSesion" class="py-2 d-none d-md-inline-block" style="width: 178px; background-color: white; color: #343a40; border-style: hidden;" onclick="cerrar()">Cerrar sesión</button>
-          </ul>
-        </div>
-      </div>
-    </nav>
-    <script type="text/javascript">
-      function cerrar(){
-          localStorage.clear();
-          sessionStorage.clear();
-          location.href="login.html";
-       }
-    </script>
-    <main role="main" class="pb-5">
-      <div class="text-center p-4">
-        <h2>Listado</h2>
-        <p class="lead">Conocé nuestros productos.</p>
-      </div>
-      
-      <div class="container">
-  
-  <!-- botones para ordenar -->
-  
-        <div class="row">
-          <div class="col text-right">
-              <div class="btn-group btn-group-toggle mb-4" data-toggle="buttons">
-                  <label class="btn btn-light" id="sortAsc" >
-                      <input type="radio" name="options" autocomplete="off"><i class="fas fa-sort-amount-down mr-1"></i>$</label>
-                  <label class="btn btn-light" id="sortDesc" >
-                      <input type="radio" name="options" autocomplete="off"><i class="fas fa-sort-amount-up mr-1"></i>$</label>
-                  <label class="btn btn-light" id="sortByCount" >
-                      <input type="radio" name="options" autocomplete="off"><i class="fas fa-sort-amount-down mr-1"></i>Rel.
-                  </label>
-              </div>
-          </div>
-  
-            <!-- campo de busqueda -->
-  
-          <div class="col-3 p-0">
-            <input type="text" name="" class="form-control" placeholder="Buscar..." id="barraBusqueda"/>
-          </div>
-      </div>
-  
-      <!-- Campos para filtrar -->
-  
-      <div class="row justify-content-end">
-        <div class="col-md-6"></div>
-          <div class="col-md-6 col-sm-12 mb-1 container">
-            <div class="row container p-0 m-0">
-              <div class="col">
-                <p class="font-weight-normal text-right my-2">Precio:</p>
-              </div>
-              <div class="col">
-                <input class="form-control" type="number" placeholder="min." id="rangeFilterCountMin">
-              </div>
-              <div class="col">
-                <input class="form-control" type="number" placeholder="máx." id="rangeFilterCountMax">
-              </div>
-              <div class="col-3 p-0">
-                <div class="btn-group" role="group">
-                  <button class="btn btn-light btn-sm" style="width: 75px; height: 37px;" id="rangeFilterCount">Filtrar</button>
-                  <button class="btn btn-light btn-sm" style="width: 75px; height: 37px;" id="clearRangeFilter">Limpiar</button> <!-- BOTON PARA RESTABLECER LA PAGINA -->
+function sortProducts(criteria, array){
+    let result = [];
+    if (criteria === ORDER_ASC_BY_NAME){
+        result = array.sort(function(a, b) {
+            if ( a.name < b.name ){ return -1; }
+            if ( a.name > b.name ){ return 1; }
+            return 0;
+        });
+    }
+    else if (criteria === ORDER_ASC_BY_COST)
+    {
+        result = array.sort(function(a, b) {
+            if ( a.cost < b.cost ){ return -1; }
+            if ( a.cost > b.cost ){ return 1; }
+            return 0;
+        });
+    }else if (criteria === ORDER_DESC_BY_COST){
+        result = array.sort(function(a, b) {
+            if ( a.cost > b.cost ){ return -1; }
+            if ( a.cost < b.cost ){ return 1; }
+            return 0;
+        });
+    }else if (criteria === ORDER_BY_PROD_COUNT){
+        result = array.sort(function(a, b) {
+            let aCount = parseInt(a.soldCount);
+            let bCount = parseInt(b.soldCount);
+
+            if ( aCount > bCount ){ return -1; }
+            if ( aCount < bCount ){ return 1; }
+            return 0;
+        });
+    }
+
+    return result;
+}
+
+function showProductsList(){
+
+    let htmlContentToAppend = "";
+
+    for(let i = 0; i < currentProductsArray.length; i++){
+        let product = currentProductsArray[i];
+        let prodName = product.name.toLowerCase();        
+        let prodDesc = product.description.toLowerCase();   
+
+        if (
+            ((minCount == undefined) || (minCount != undefined && parseInt(product.cost) >= minCount)) &&
+            ((maxCount == undefined) || (maxCount != undefined && parseInt(product.cost) <= maxCount)) &&
+            ((prodDesc.indexOf(texto)) !== -1 || (prodName.indexOf(texto)) !== -1) 
+            ){
+
+            htmlContentToAppend += `
+            <a href="product-info.html" class="list-group-item list-group-item-action">
+                <div class="row">
+                    <div class="col-3">
+                        <img src="` + product.imgSrc + `" alt="` + product.description + `" class="img-thumbnail">
+                    </div>
+                    <div class="col">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h4 class="mb-1">`+ product.name +`</h4>
+                            <small class="text-muted">` + product.currency + ": " + product.cost + ` </small>
+                        </div>
+                        <div class="d-flex w-100 justify-content-between">
+                            <h4 class="mb-1"></h4>
+                            <small class="text-muted">` + product.soldCount + ` artículos vendidos</small>
+                        </div>
+                        <p class="mb-1">` + product.description + `</p>
+                    </div>
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      
-      
-        <div class="row">
-          <div class="list-group" id="cat-list-container">
-          </div>
-        </div>
-      </div>
-    </main>
-    
-    
-    <div id="spinner-wrapper"><div class="lds-ring"><div></div><div></div><div></div><div></div></div></div>
-    <footer class="text-muted">
-      <div class="container">
-        <p class="float-right">
-          <a href="#">Volver arriba</a>
-        </p>
-        <p>Este sitio forma parte de Desarrollo Web - JAP - 2020</p>
-        <p>Clickea <a target="_blank" href="Letra.pdf">aquí</a> para descargar la letra del obligatorio.</p>
-      </div>
-    </footer>
-    <script src="js/jquery-3.4.1.min.js"></script>
-    <script src="js/bootstrap.bundle.min.js"></script>
-    <script src="js/init.js"></script>
-    <script src="js/products.js"></script>
-  </body>
-  </html>
+            </a>
+            `
+        }
+        document.getElementById("prod-list-container").innerHTML = htmlContentToAppend;
+    }
+}
+
+function sortAndShowProducts(sortCriteria, ProductsArray){
+    currentSortCriteria = sortCriteria;
+
+    if(ProductsArray != undefined){
+        currentProductsArray = ProductsArray;
+    }
+
+    currentProductsArray = sortProducts(currentSortCriteria, currentProductsArray);
+
+    showProductsList();
+}
+
+document.addEventListener("DOMContentLoaded", function(e){
+    getJSONData(PRODUCTS_URL).then(function(resultObj){
+        if (resultObj.status === "ok"){
+            sortAndShowProducts(ORDER_ASC_BY_NAME, resultObj.data);
+        }
+    });
+
+    document.getElementById("clearRangeFilter").addEventListener("click", function(){
+
+        sortAndShowProducts(ORDER_ASC_BY_NAME);
+
+        document.getElementById("searchBar").value = "";
+        document.getElementById("rangeFilterCountMin").value = "";
+        document.getElementById("rangeFilterCountMax").value = "";
+
+        texto = undefined;
+        minCount = undefined;
+        maxCount = undefined;
+
+        filtrar();
+        showProductsList();
+    });
+
+    document.getElementById("sortAsc").addEventListener("click", function(){
+        sortAndShowProducts(ORDER_ASC_BY_COST);
+    });
+
+    document.getElementById("sortDesc").addEventListener("click", function(){
+        sortAndShowProducts(ORDER_DESC_BY_COST);
+    });
+
+    document.getElementById("sortByCount").addEventListener("click", function(){
+        sortAndShowProducts(ORDER_BY_PROD_COUNT);
+    });
+
+    document.getElementById("rangeFilterCount").addEventListener("click", function(){
+
+        minCount = document.getElementById("rangeFilterCountMin").value;
+        maxCount = document.getElementById("rangeFilterCountMax").value;
+
+        if ((minCount != undefined) && (minCount != "") && (parseInt(minCount)) >= 0){
+            minCount = parseInt(minCount);
+        }
+        else{
+            minCount = undefined;
+        }
+
+        if ((maxCount != undefined) && (maxCount != "") && (parseInt(maxCount)) >= 0){
+            maxCount = parseInt(maxCount);
+        }
+        else{
+            maxCount = undefined;
+        }
+
+        showProductsList();
+    });
+});
+
+const filtrar= ()=>{
+    texto = searchBar.value.toLowerCase();
+    showProductsList();
+}
+searchBar.addEventListener('keyup', filtrar)
+filtrar();
