@@ -66,6 +66,6 @@ if (sessionStorage.getItem('usuario') != null && getFileName() == "login.html") 
 //elementos HTML presentes.
 document.addEventListener("DOMContentLoaded", function(e){
   if(getFileName() != "login.html"){
-    document.getElementById("dropdown_perfil").innerHTML = sessionStorage.getItem("usuario");
+    
   }
 });
