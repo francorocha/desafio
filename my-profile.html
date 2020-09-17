@@ -41,8 +41,38 @@
       <a class="py-2 d-none d-md-inline-block" href="products.html">Productos</a>
       <a class="py-2 d-none d-md-inline-block" href="sell.html">Vender</a>
       <a class="py-2 d-none d-md-inline-block" href="cart.html">Mi carrito</a>
-    </div>
-  </nav>
+      <div class="btn-group">
+        <button id="showEmail" class="py-2 d-none d-md-inline-block dropdown-toggle" type="button" data-toggle="dropdown" style="width: 180px; background-color: #343a40; color: white; border-style: hidden;">
+          <script>
+            let htmlContentToAppend = "";
+            if (localStorage.getItem('usuario') != null) {
+              htmlContentToAppend += `
+            <span> ` + localStorage.getItem("usuario") + ` </span>
+            `
+            }else{
+              htmlContentToAppend += `
+            <span> ` + sessionStorage.getItem("usuario") + ` </span>
+            `
+            }
+            document.getElementById("showEmail").innerHTML = htmlContentToAppend;
+          </script>
+        </button>
+        <ul class="dropdown-menu">
+          <button class="py-2 d-none d-md-inline-block" style="width: 178px; background-color: white; color: #343a40; border-style: hidden;"><a href="cart.html">Mi Carrito</a></button>
+              <button class="py-2 d-none d-md-inline-block" style="width: 178px; background-color: white; color: #343a40; border-style: hidden;"><a href="my-profile.html">Mi Perfil</a></button>
+          <button id="cerrarSesion" class="py-2 d-none d-md-inline-block" style="width: 178px; background-color: white; color: #343a40; border-style: hidden;" onclick="cerrar()">Cerrar sesión</button>
+        </ul>
+      </div>
+      </div>
+    </nav>
+        <script type="text/javascript">
+          function cerrar(){
+              localStorage.clear();
+              sessionStorage.clear();
+              location.href="login.html";
+           }
+        </script>
+  
   <div class="container p-5">
     <div class="alert alert-danger" role="alert" style="position: relative; width:auto; top: 0;">
       <h4 class="alert-heading">¡A trabajar! :)</h4>
