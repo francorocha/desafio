@@ -4,26 +4,35 @@ var currentRelatedArray = [];
 var product = {};
 
 function showImagesGallery(array) {
-	let htmlContentToAppend = "";
+    let htmlContentToAppend = "";
+    var activar;
 
 	for (let i = 0; i < array.length; i++) {
-		let imageSrc = array[i];
+        let imageSrc = array[i];
+        
+        if(i == 0) activar = "active";
+        else activar = "";
 
 		htmlContentToAppend +=
-			`
-        <div class="col-lg-3 col-md-4 col-6">
-            <div class="d-block mb-4 h-100">
-                <img class="img-fluid img-thumbnail" src="` +
-			imageSrc +
-			`" alt="">
-            </div>
-        </div>
-        `;
+			`<div class="carousel-item  `+ activar +`">
+                <img src="` + imageSrc + `" class="d-block w-100" alt="">
+         </div>
+        `
 
-		document.getElementById(
-			"productImagesGallery"
-		).innerHTML = htmlContentToAppend;
+		document.getElementById("Carrosel").innerHTML = htmlContentToAppend;
 	}
+}
+function createCard(object){
+    let card = `
+        <div class="card withzoom" style="width: 18em; height:23em; margin-right: 1em";>
+        <img class="card-img-top" src="`+ object.imgSrc +`" alt="Card image cap">
+        <div class="card-body">
+            <h5 class="card-title">`+ object.name +`</h5>
+            <p class="card-text"><hr>`+ object.description +`</p>
+        </div>
+        </div>
+    `
+    return card;
 }
 
 function showRelatedProducts(array){
@@ -34,16 +43,18 @@ function showRelatedProducts(array){
 
             htmlContentToAppend += `
             <div style="display:flex;">
-            <div style="width: 250px; margin-right: 0.5rem">
-                ` + product1.name + `<br> <img class="img-fluid img-thumbnail" width="100%" src="` + product1.imgSrc + `" alt=""></img>
-            </div>
-            <div style="width: 250px">
-                ` + product2.name + `<br> <img class="img-fluid img-thumbnail" width="100%" src="` + product2.imgSrc + `" alt=""></img>
-            </div>
+            <div> <a class="custom-card" href="./product-info.html" style="text-decoration: none;">`+
+            createCard(product1) + `
+            </div> </a>
+            <div> <a class="custom-card" href="./product-info.html" style="text-decoration: none">` +
+            createCard(product2) + `            
+            </div> </a>
             </div>
             `
         document.getElementById("productRelated").innerHTML = htmlContentToAppend;
 }
+
+
 
 function showComments(array){
     let htmlContentToAppend = "";
@@ -136,3 +147,28 @@ document.addEventListener("DOMContentLoaded", function(e){
         }
     });
 });
+
+document.getElementById("enviar").addEventListener("click", function(){
+    var comentario = document.getElementById("productComments").value;
+
+    var puntuacion = document.getElementById("puntua").value;
+
+    var dateTime = new Date().toLocaleDateString();
+
+    var user = localStorage.getItem("usuario");
+
+    user = user.email;
+
+    var objetoComentario = {
+
+        comment: comentario,
+        score: puntuacion,
+        fecha: dateTime,
+        usuario: user
+    }
+
+    var cadObjetComment = JSON.stringify(objetoComentario);
+
+    localStorage.setItem("Comment", cadObjetComment);
+
+})
