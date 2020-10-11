@@ -74,26 +74,83 @@
         </script>
   
   <div class="container p-5">
-    <div class="alert alert-danger" role="alert" style="position: relative; width:auto; top: 0;">
-      <h4 class="alert-heading">¡A trabajar! :)</h4>
-      <p>Esta sección corresponde a: Entrega 5 (Fecha de entrega: 11/10/2020) y Entrega 6 (Fecha de entrega: 25/10/2020).</p>
-      <hr>
-      <p class="mb-0">Para saber qué debes hacer, fijate en la actividad en CREA correspondiente a esta entrega.</p>
+    <h3 style="text-align: center;">Carrito de compras</h3>
+    <h5>Artículos a comprar</h5>
+    <table class="table">
+        <thead>
+        <tr>
+        <th scope="col"></th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Moneda</th>
+        <th scope="col">Costo</th>
+        <th scope="col">Cantidad</th>
+        <th scope="col">Subtotal</th>
+        </tr>
+        </thead>
+        <tbody id="articles-container">
+        </tbody>
+    </table>   
+    <hr>
+    <br>
+      <form>
+    <h5 class="mb-3">Tipo de envío</h5>
+                <div id="envío"></div>
+                <hr class="mb-4">
+                <div>
+                  <h5>Dirección de envío</h5>
+                  <div style="display: flex;">
+                    <div>
+                      <label style="font-size: 0.9rem;" for="calle">Calle</label><br>
+                      <input style="border: 1px solid lightgray; height: 1.8rem; width: 20rem; border-radius: 0.2rem;" type="text" name="calle">
+                    </div>
+                    <div style="margin-left: 2rem;">
+                     <label style="font-size: 0.9rem;" for="num">Número</label><br>
+                     <input style="border: 1px solid lightgray; height: 1.8rem; border-radius: 0.2rem;" type="number" name="num">
+                    </div>
+                  </div><br>
+                  <label style="font-size: 0.9rem;" for="esq">Esquina</label><br>
+                  <input style="border: 1px solid lightgray; height: 1.8rem; width: 20rem; border-radius: 0.2rem;" type="text" name="esq" id="">
+                </div>
+                <hr class="mb-4">
+                <h5 class="mb-3">Costos</h5>
+                <ul class="list-group mb-3">
+                    <li class="list-group-item d-flex justify-content-between lh-condensed">
+                      <div>
+                        <h6 class="my-0">Subtotal ($)</h6>
+                        <small class="text-muted">Costo unitario del producto por cantidad</small>
+                      </div>
+                      <span class="text-muted" id="productCostText"></span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between lh-condensed">
+                      <div>
+                        <h6 class="my-0">Costo de envío ($)</h6>
+                        <small class="text-muted">Según el tipo de envío</small>
+                      </div>
+                      <span class="text-muted" id="comissionText"></span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                      <span>Total ($)</span>
+                      <strong id="totalCostText"></strong>
+                    </li>
+                  </ul>
+                <hr class="mb-4">
+                <h5>Forma de pago</h5>
+                <h6>No ha seleccionado. <a href="">Seleccionar</a></h6> <br>
+                <button class="btn btn-primary btn-lg" type="submit">Finalizar compra</button>
+              </form>
+            </div>
+    <div id="spinner-wrapper">
+      <div class="lds-ring">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
     </div>
-  </div>
-  <div id="spinner-wrapper">
-    <div class="lds-ring">
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-    </div>
-  </div>
-  <script src="js/jquery-3.4.1.min.js"></script>
-  <script src="js/bootstrap.bundle.min.js"></script>
-  <script src="js/dropzone.js"></script>
-  <script src="js/init.js"></script>
-  <script src="js/cart.js"></script>
-</body>
-
-</html>
+    <script src="js/jquery-3.4.1.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/dropzone.js"></script>
+    <script src="js/init.js"></script>
+    <script src="js/cart.js"></script>
+  </body>
+  </html>
