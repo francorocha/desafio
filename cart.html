@@ -116,7 +116,25 @@
                                 data-target="#contidionsModal">Ver condiciones</button>
                         </div>
                     </div>
-                    <hr class="mb-4">
+                    <h5 class="mb-3">Tipo de envío</h5>
+              <hr class="mb-4">
+              <div>
+                <h5>Dirección de envío</h5>
+                <div style="display: flex;">
+                  <div>
+                    <input type="text" style="display: none;">
+                    <label style="font-size: 0.9rem;" for="calle">Calle</label><br>
+                    <input style="border: 1px solid lightgray; height: 1.8rem; width: 20rem; border-radius: 0.2rem;" type="text" name="calle" required>
+                  </div>
+                  <div style="margin-left: 2rem;">
+                   <label style="font-size: 0.9rem;" for="num">Número</label><br>
+                   <input style="border: 1px solid lightgray; height: 1.8rem; border-radius: 0.2rem;" type="number" name="num" required>
+                  </div>
+                </div><br>
+                <label style="font-size: 0.9rem;" for="esq">Esquina</label><br>
+                <input style="border: 1px solid lightgray; height: 1.8rem; width: 20rem; border-radius: 0.2rem;" type="text" name="esq" required>
+              </div>
+              <hr class="mb-4">
                     <h4 class="mb-3">Costos</h4>
                     <ul class="list-group mb-3">
                         <li class="list-group-item d-flex justify-content-between lh-condensed">
