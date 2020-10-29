@@ -1,179 +1,306 @@
-var articlesArray = [ ];
+var cartArray = [];
+var currency = [];
+var price = [];
+var quantity = [];
 
-function showArticles(array){
+var precioCarrito = 0;
+var impuestoCarrito = 0;
+var totalCarrito = 0;
+var taxType = 0;
+var currentPaymentForm = 0;
+
+function loadCartList(array) { // Cargo la tabla
 
     let htmlContentToAppend = "";
-    for(let i = 0; i < array.articles.length; i++){
-        let article = array.articles[i];
-
-        htmlContentToAppend += `
-          <tr>
-            <td style="width: 10%"><img width="80%" src="` + article.src + `"></td>
-            <td style="width: 22%;">`+ article.name +`</td>
-            <td style="width: 15%;">`+ article.currency +`</td>
-            <td style="width: 15%;">`+ article.unitCost + `</td>
-            <td style="width: 15%"><input min="1" style="width: 43%; border: 1px solid lightgray; border-radius:0.2rem;" type="number" value="` + article.count + `"></td>
-            <td style="width: 1%">`+ article.count*article.unitCost +`</td>
-            <td class="btn-removeItem">
+    for (let i = 0; i < array.articles.length; i++) {
+        let product = array.articles[i];
+        htmlContentToAppend +=
+            `
+            <tr class="articleRow">
+                <td style="width:15%"><img width="80%" src="` + product.src + `" alt="placeholder"></td>
+                <td class="align-middle">` + product.name + `</td>
+                <td class="articleCost align-middle">` + product.currency + " " + product.unitCost + `</td>
+                <td class="align-middle"><input class="articleQuantity form-control" type="number" min="0" value="` + product.count + `" style="min-width: 4em; width: 4em"></td>
+                <td class="articleTotal align-middle">` + product.currency + " " + (product.unitCost * product.count) + `</td>
+                <td class="btn-hideItem align-middle">
                     <button type="button"" class="button btn-danger">
-                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-x" fill="white" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
-                    </svg>
-                </button>
-            </td>
-          </tr>
-        `
-        document.getElementById("articles-container").innerHTML = htmlContentToAppend;        
-        
-            document.getElementsByTagName("input")[1].addEventListener("change", function(){
-                document.getElementsByTagName("td")[11].textContent = ($(this).val()*article.unitCost);
-                document.getElementById("productCostText").innerHTML = (parseInt(document.getElementsByTagName("td")[5].textContent) + parseInt(document.getElementsByTagName("td")[11].textContent*40));
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-x" fill="white" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                        </svg>
+                    </button>
+                </td>
+            </tr>
+            `
+        document.getElementById(
+            "cuerpo-carrito"
+        ).innerHTML = htmlContentToAppend;
 
-                if (document.getElementById("goldradio").checked === true){
-                    document.getElementById("comissionText").innerHTML = Math.round((parseInt(document.getElementsByTagName("td")[5].textContent) + parseInt(document.getElementsByTagName("td")[11].textContent*40)) * 0.15);
-                    document.getElementById("totalCostText").innerHTML = parseInt(document.getElementsByTagName("td")[5].textContent) + parseInt(document.getElementsByTagName("td")[11].textContent*40) + parseInt(document.getElementById("comissionText").textContent);
-    
-                }
-                if (document.getElementById("premiumradio").checked === true){
-                    document.getElementById("comissionText").innerHTML = Math.round((parseInt(document.getElementsByTagName("td")[5].textContent) + parseInt(document.getElementsByTagName("td")[11].textContent*40)) * 0.07);
-                    document.getElementById("totalCostText").innerHTML = (parseInt(document.getElementsByTagName("td")[5].textContent) + parseInt(document.getElementsByTagName("td")[11].textContent*40)) + parseInt(document.getElementById("comissionText").textContent);
-    
-                }
-            
-                if (document.getElementById("standardradio").checked === true){
-                    document.getElementById("comissionText").innerHTML = Math.round((parseInt(document.getElementsByTagName("td")[5].textContent) + parseInt(document.getElementsByTagName("td")[11].textContent*40)) * 0.05);
-                    document.getElementById("totalCostText").innerHTML = (parseInt(document.getElementsByTagName("td")[5].textContent) + parseInt(document.getElementsByTagName("td")[11].textContent*40)) + parseInt(document.getElementById("comissionText").textContent);
+        // Actualizo los elementos ya existentes
+        quantity[i] = product.count;
+        currency[i] = product.currency;
+        if (currency[i] == "USD") {
+            price[i] = product.unitCost;
+            precioCarrito += price[i] * quantity[i] * 40;
+        } else {
+            price[i] = product.unitCost;
+            precioCarrito += price[i] * quantity[i];
+        }
 
-                }
-
-            });
-            
-            document.getElementsByTagName("input")[0].addEventListener("change", function(){
-                document.getElementsByTagName("td")[5].textContent = $(this).val()*array.articles[0].unitCost;
-                document.getElementById("productCostText").innerHTML = (parseInt(document.getElementsByTagName("td")[5].textContent) + parseInt(document.getElementsByTagName("td")[11].textContent*40));
-
-                if (document.getElementById("goldradio").checked === true){
-                    document.getElementById("comissionText").innerHTML = Math.round((parseInt(document.getElementsByTagName("td")[5].textContent) + parseInt(document.getElementsByTagName("td")[11].textContent*40)) * 0.15);
-                    document.getElementById("totalCostText").innerHTML = (parseInt(document.getElementsByTagName("td")[5].textContent) + parseInt(document.getElementsByTagName("td")[11].textContent*40)) + parseInt(document.getElementById("comissionText").textContent);
-    
-                }
-                if (document.getElementById("premiumradio").checked === true){
-                    document.getElementById("comissionText").innerHTML = Math.round((parseInt(document.getElementsByTagName("td")[5].textContent) + parseInt(document.getElementsByTagName("td")[11].textContent*40)) * 0.07);
-                    document.getElementById("totalCostText").innerHTML = (parseInt(document.getElementsByTagName("td")[5].textContent) + parseInt(document.getElementsByTagName("td")[11].textContent*40)) + parseInt(document.getElementById("comissionText").textContent);
-
-                }
-            
-                if (document.getElementById("standardradio").checked === true){
-                    document.getElementById("comissionText").innerHTML = Math.round((parseInt(document.getElementsByTagName("td")[5].textContent) + parseInt(document.getElementsByTagName("td")[11].textContent*40)) * 0.05);
-                    document.getElementById("totalCostText").innerHTML = (parseInt(document.getElementsByTagName("td")[5].textContent) + parseInt(document.getElementsByTagName("td")[11].textContent*40)) + parseInt(document.getElementById("comissionText").textContent);
-    
-                }
-
-            });     
+        document.getElementById("productCostText").innerHTML = "UYU " + precioCarrito;
+        updateTax(0.15)
+        updateTotalCost();
     }
-            document.getElementById("productCostText").innerHTML = (parseInt(document.getElementsByTagName("td")[5].textContent) + parseInt(document.getElementsByTagName("td")[11].textContent*40));
-        
-let envío = `<div class="d-block my-3">
-<div class="custom-control custom-radio">
-  <input id="goldradio" name="publicationType" type="radio" class="custom-control-input" checked="" required="">
-  <label class="custom-control-label" for="goldradio">Premium: 2 a 5 días (15%)</label>
-</div>
-<div class="custom-control custom-radio">
-  <input id="premiumradio" name="publicationType" type="radio" class="custom-control-input" required="">
-  <label class="custom-control-label" for="premiumradio">Express: 5 a 8 días (7%)</label>
-</div>
-<div class="custom-control custom-radio">
-  <input id="standardradio" name="publicationType" type="radio" class="custom-control-input" required="">
-  <label class="custom-control-label" for="standardradio">Estándar: 12 a 15 días (5%)</label>
-</div>
-</div>`
 
-document.getElementById("envío").innerHTML = envío;
+    let articleRow = document.getElementsByClassName("articleRow");
+    let articleTotal = document.getElementsByClassName("articleTotal");
+    for (let i = 0; i < articleRow.length; i++) {
+        articleRow[i].addEventListener("change", function () {
+            quantity[i] = document.getElementsByClassName("articleQuantity")[i].value;
+            articleTotal[i].innerHTML = currency[i] + " " + (price[i] * quantity[i]);
+
+            precioCarrito = 0;
+            for (let j = 0; j < articleRow.length; j++) {
+                if (currency[j] == "USD") {
+                    precioCarrito += Math.round(price[j] * quantity[j] * 40);
+                } else {
+                    precioCarrito += Math.round(price[j] * quantity[j]);
+                }
+            }
+            if (quantity[i] < 1) {
+                hideItem(articleRow[i]);
+            }
+
+            document.getElementById("productCostText").innerHTML = "UYU " + precioCarrito;
+            switch (taxType) {
+                case 0:
+                    updateTax(0.15);
+                    break;
+                case 1:
+                    updateTax(0.07);
+                    break;
+                case 2:
+                    updateTax(0.05);
+                    break;
+            }
+            updateTotalCost();
+        });
+        document.getElementsByClassName("btn-hideItem")[i].addEventListener("click", function () {
+            quantity[i] = document.getElementsByClassName("articleQuantity")[i].value;
+            quantity[i] = 0;
+            articleTotal[i].innerHTML = currency[i] + " " + (price[i] * quantity[i]);
+
+            precioCarrito = 0;
+            for (let j = 0; j < articleRow.length; j++) {
+                if (currency[j] == "USD") {
+                    precioCarrito += Math.round(price[j] * quantity[j] * 40);
+                } else {
+                    precioCarrito += Math.round(price[j] * quantity[j]);
+                }
+            }
+
+            document.getElementById("productCostText").innerHTML = "UYU " + precioCarrito;
+            switch (taxType) {
+                case 0:
+                    updateTax(0.15);
+                    break;
+                case 1:
+                    updateTax(0.07);
+                    break;
+                case 2:
+                    updateTax(0.05);
+                    break;
+            }
+            hideItem(articleRow[i]);
+            updateTotalCost();
+        });
+    }
+
+}
+
+function hideItem(item) {
+    item.style.display = 'none';
+}
+
+function updateTax(percentage) {
+    impuestoCarrito = Math.round(precioCarrito * percentage);
+    document.getElementById("comissionText").innerHTML = "UYU " + impuestoCarrito;
+}
+
+function updateTotalCost() {
+    totalCarrito = precioCarrito + impuestoCarrito;
+    document.getElementById("totalCostText").innerHTML = "UYU " + totalCarrito;
+}
 
 function getCardType() {
     let num = document.getElementById("ccNumber").value;
+    let brandBadge = document.getElementById("brandBadge");
+
     let numArr = num.split('');
     if (numArr[0] == 3 && (numArr[1] == 4 || numArr[1] == 7)) {
-        alert('American Express');
-    }
-    if (numArr[0] == 4) {
-        alert('Visa');
-    }
-    if (numArr[0] == 3 && numArr[1] == 0 && ((1 <= numArr[2]) && (numArr[2] <= 5) || (numArr[2] == 9))) {
-        alert('Diners Club');
-    }
-    if (((numArr[0] == 5) && ((numArr[1] >= 1) && (numArr[1] <= 5))) || ((numArr[0] == 2) && ((numArr[1] >= 2) && (numArr[1] <= 7)))) {
-        alert('MasterCard');
-    }
-    if((num.split('',2) == '3,5') || (num.split('',4) == '2,1,3,1') || (num.split('',4) == '1,8,0,0')){
-        alert('JCB');
-    }
-    if((num.split('',4) == '6,0,1,1') || (num.split('',2) == '6,5') || ((num.split('', 2) == '6,4') && (numArr[2] >= 4) && (numArr[2] <= 9))){
-        alert('Discover');
+        // alert('American Express');
+        brandBadge.innerHTML = "American Express";
+    } else if (numArr[0] == 4) {
+        // alert('Visa');
+        brandBadge.innerHTML = "Visa";
+    } else if (numArr[0] == 3 && numArr[1] == 0 && ((1 <= numArr[2]) && (numArr[2] <= 5) || (numArr[2] == 9))) {
+        // alert('Diners Club');
+        brandBadge.innerHTML = "Diners Club";
+    } else if (((numArr[0] == 5) && ((numArr[1] >= 1) && (numArr[1] <= 5))) || ((numArr[0] == 2) && ((numArr[1] >= 2) && (numArr[1] <= 7)))) {
+        // alert('MasterCard');
+        brandBadge.innerHTML = "Master Card";
+    } else if ((num.split('', 2) == '3,5') || (num.split('', 4) == '2,1,3,1') || (num.split('', 4) == '1,8,0,0')) {
+        // alert('JCB');
+        brandBadge.innerHTML = "JCB";
+    } else if ((num.split('', 4) == '6,0,1,1') || (num.split('', 2) == '6,5') || ((num.split('', 2) == '6,4') && (numArr[2] >= 4) && (numArr[2] <= 9))) {
+        // alert('Discover');
+        brandBadge.innerHTML = "Discover";
+    } else {
+        brandBadge.innerHTML = "";
     }
 }
 
-function validateCard(){
-    //funcion tomada de https://gist.github.com/DiegoSalazar/4075533
+function expSlash() {
+    let code = document.getElementById("ccExp");
+    if (code.value.length == 2) {
+        let hasSlash = false;
+        for (let i = 0; i < code.value.length; i++) {
+            if (code.value[i] == "/") {
+                hasSlash = true;
+                break;
+            }
+        }
+        if (!hasSlash) {
+            code.value += "/";
+        }
+    } else if (code.value.length == 4) {
+        let hasSlash = false;
+        for (let i = 0; i < code.value.length; i++) {
+            if (code.value[i] == "/") {
+                hasSlash = true;
+                break;
+            }
+        }
+        if (!hasSlash) {
+            code.value = code.value[0] + code.value[1] + "/" + code.value[2] + code.value[3];
+        }
+    } else if (code.value.length >= 5) {
+        let hasSlash = false;
+        for (let i = 0; i < code.value.length; i++) {
+            if (code.value[i] == "/") {
+                hasSlash = true;
+                break;
+            }
+        }
+        if (!hasSlash) {
+            code.value = code.value[0] + code.value[1] + "/" + code.value[2] + code.value[3];
+        }
+    }
+}
+
+function validateDate(element){
+    let month = element.value[0] * 10 + element.value[1];
+    let year = element.value[3] * 10 + element.value[4];
+
+    if (month > 12){
+        element.value[0] = 1;
+        element.value[1] = 2;
+    }
+    else if (month < 1){
+        element.value[0] = 0;
+        element.value[1] = 1;
+    }
+}
+
+function validateCard() {
+    //funcion tomada de https://gist.github.com/DiegoSalazar/4075533 (usa el Algoritmo de Luhn)
     let value = document.getElementById("ccNumber").value;
-    if (/[^0-9-\s]+/.test(value)) return false;
-    
-	let nCheck = 0, bEven = false;
-	value = value.replace(/\D/g, "");
+    let verificationBadge = document.getElementById("verificationBadge");
 
-	for (var n = value.length - 1; n >= 0; n--) {
-		var cDigit = value.charAt(n),
-			  nDigit = parseInt(cDigit, 10);
+    if (value.length > 13) {
+        if (/[^0-9-\s]+/.test(value)) return false;
 
-		if (bEven && (nDigit *= 2) > 9) nDigit -= 9;
+        let nCheck = 0,
+            bEven = false;
+        value = value.replace(/\D/g, "");
 
-		nCheck += nDigit;
-		bEven = !bEven;
-	}
+        for (var n = value.length - 1; n >= 0; n--) {
+            var cDigit = value.charAt(n),
+                nDigit = parseInt(cDigit, 10);
 
-	alert((nCheck % 10) == 0);
+            if (bEven && (nDigit *= 2) > 9) nDigit -= 9;
+
+            nCheck += nDigit;
+            bEven = !bEven;
+        }
+        if (value.length > 13) {
+            if (!(nCheck % 10) == 0) {
+                verificationBadge.innerHTML = "Número inválido";
+                return false;
+            } else {
+                verificationBadge.innerHTML = "";
+            }
+        }
+    } else if (value.length == 0) {
+        verificationBadge.innerHTML = "";
+        return false;
+    }
 }
-document.getElementById("ccNumber").addEventListener("change", function () {
+
+function validarCampos() {
+    let nombre = document.getElementById("ccName").value;
+    var letras = /^[a-zA-Z][a-zA-Z\s]*$/;
+    if (!(nombre.match(letras))) {
+        alert("Por favor, ingrese un nombre válido.");
+    } else if ((document.getElementById("verificationBadge").innerHTML != "") || (document.getElementById("brandBadge").innerHTML == "")) {
+        alert("Por favor, verifique el número de la tarjeta.");
+    } else {
+        alert("Compra exitosa!");
+        window.location.assign("index.html");
+    }
+}
+
+document.getElementById("ccNumber").addEventListener("keyup", function () {
     getCardType();
     validateCard();
+});
+
+document.getElementById("ccExp").addEventListener("keyup", function () {
+    expSlash();
 })
 
-document.getElementById("goldradio").addEventListener("change", function(){
-        document.getElementById("comissionText").innerHTML = Math.round((parseInt(document.getElementsByTagName("td")[5].textContent) + parseInt(document.getElementsByTagName("td")[11].textContent*40)) * 0.15);
-        document.getElementById("totalCostText").innerHTML = (parseInt(document.getElementsByTagName("td")[5].textContent) + parseInt(document.getElementsByTagName("td")[11].textContent*40)) + parseInt(document.getElementById("comissionText").textContent);
-    });
-document.getElementById("premiumradio").addEventListener("change", function(){
-    document.getElementById("comissionText").innerHTML = Math.round((parseInt(document.getElementsByTagName("td")[5].textContent) + parseInt(document.getElementsByTagName("td")[11].textContent*40)) * 0.07);
-    document.getElementById("totalCostText").innerHTML = (parseInt(document.getElementsByTagName("td")[5].textContent) + parseInt(document.getElementsByTagName("td")[11].textContent*40)) + parseInt(document.getElementById("comissionText").textContent);
+document.getElementById("ccExp").addEventListener("change", function () {
+    validateDate(document.getElementById("ccExp"));
+})
 
+
+document.getElementById("premiumradio").addEventListener("change", function () {
+    updateTax(0.15);
+    updateTotalCost();
+    taxType = 0;
+});
+document.getElementById("expressradio").addEventListener("change", function () {
+    updateTax(0.07);
+    updateTotalCost();
+    taxType = 1;
+});
+document.getElementById("standardradio").addEventListener("change", function () {
+    updateTax(0.05);
+    updateTotalCost();
+    taxType = 2;
 });
 
-document.getElementById("standardradio").addEventListener("change", function(){
-    document.getElementById("comissionText").innerHTML = Math.round((parseInt(document.getElementsByTagName("td")[5].textContent) + parseInt(document.getElementsByTagName("td")[11].textContent*40)) * 0.05);
-    document.getElementById("totalCostText").innerHTML = (parseInt(document.getElementsByTagName("td")[5].textContent) + parseInt(document.getElementsByTagName("td")[11].textContent*40)) + parseInt(document.getElementById("comissionText").textContent);
-
+document.getElementById("btnComprar").addEventListener("click", function () {
+    validarCampos();
 });
-
-if (document.getElementById("goldradio").checked === true){
-    document.getElementById("comissionText").innerHTML = Math.round((parseInt(document.getElementsByTagName("td")[5].textContent) + parseInt(document.getElementsByTagName("td")[11].textContent*40)) * 0.15);
-    document.getElementById("totalCostText").innerHTML = (parseInt(document.getElementsByTagName("td")[5].textContent) + parseInt(document.getElementsByTagName("td")[11].textContent*40)) + parseInt(document.getElementById("comissionText").textContent);
-
-}
-}
-
-
 
 //Función que se ejecuta una vez que se haya lanzado el evento de
 //que el documento se encuentra cargado, es decir, se encuentran todos los
 //elementos HTML presentes.
-document.addEventListener("DOMContentLoaded", function(e){
-    getJSONData("https://japdevdep.github.io/ecommerce-api/cart/654.json").then(function(resultObj){
-        if (resultObj.status === "ok")
-        {
-            articlesArray = resultObj.data;
-            //Muestro los artículos ordenados
-            showArticles(articlesArray);
+document.addEventListener("DOMContentLoaded", function (e) {
+    getJSONData(CART_INFO_URL).then(function (resultObj) {
+        if (resultObj.status === "ok") {
+            loadCartList(resultObj.data);
         }
     });
-});;
+});
 
