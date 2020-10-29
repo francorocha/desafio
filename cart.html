@@ -34,46 +34,95 @@
 </head>
 
 <body>
-  <nav class="site-header sticky-top py-1 bg-dark">
-    <div class="container d-flex flex-column flex-md-row justify-content-between">
-      <a class="py-2 d-none d-md-inline-block" href="index.html">Inicio</a>
-      <a class="py-2 d-none d-md-inline-block" href="categories.html">Categorías</a>
-      <a class="py-2 d-none d-md-inline-block" href="products.html">Productos</a>
-      <a class="py-2 d-none d-md-inline-block" href="sell.html">Vender</a>
-      <a class="py-2 d-none d-md-inline-block" href="cart.html">Mi carrito</a>
+
+  <!-- Modal -->
+  <div class="modal fade" id="seleccionarModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalLabel">Selecciona el medio de pago</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form action="login.html">
+          <input type="radio" name="method" checked id="tarjeta">
+          <label for="method" style="font-size: 1.1rem;">Tarjeta de crédito/débito:</label>
+          <div>
+            <label style="margin-left: 2rem;" for="cardnumber">N° de tarjeta</label>
+            <input type="number" class="number" name="cardnumber" style="margin-right: 0.5rem; border: 1px solid lightgray; width: 10rem; height: 1.8rem; border-radius: 0.2rem;" required>
+            <label for="cvv">CVV</label>
+            <input type="number" class="number" name="cvv" style="border: 1px solid lightgray; width: 4rem; height: 1.8rem; border-radius: 0.2rem;" required><br>
+            <div style="margin-top: 0.5rem;">
+              <label style="margin-left: 2rem; margin-right: 1.09rem;" for="name">Expiración</label>
+              <input type="date" id="date" name="date" style="border: 1px solid lightgray; width: 10rem; height: 1.8rem; border-radius: 0.2rem;" required>
+            </div>
+          </div>
+          <div style="margin-left: 2rem;">
+            <input type="radio" name="card" checked>
+            <img src="https://belybula.com/wp-content/uploads/2019/04/Visa-Logo-Free-Download-PNG.png" alt="Visa" width="13%">
+            <input type="radio" name="card">
+            <img src="https://cdn.iconscout.com/icon/free/png-256/mastercard-credit-debit-card-bank-transaction-32303.png" alt="MasterCard" width="21%">
+            <input type="radio" name="card">
+            <img src="https://www.greedyrates.ca/wp-content/uploads/2018/04/American_Express_logo-394x222-394x222-c-default.jpg" alt="American Express" width="14%">
+          </div>
+          <input type="radio" name="method" id="banco">
+          <label for="method" style="font-size: 1.1rem;">Transferencia bancaria:</label><br>
+          <div style="margin-top: 0.5rem; margin-left: 2rem;">
+            <label for="cuenta" style="margin-right: 0.5rem;">N° de cuenta</label>
+            <input type="number" class="number" name="cuenta" style="border: 1px solid lightgray; width: 11rem; height: 1.8rem; border-radius: 0.2rem;" required><br>
+            <label for="code">Código SWIFT</label>
+            <input type="number" class="number" name="code" style="border: 1px solid lightgray; height: 1.8rem; width: 11rem; border-radius: 0.2rem;" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Finalizar compra</button>
+        </div>
+      </form>
+      </div>
+    </div>
+  </div>
+  
+    <nav class="site-header sticky-top py-1 bg-dark">
+      <div class="container d-flex flex-column flex-md-row justify-content-between">
+        <a class="py-2 d-none d-md-inline-block" href="index.html">Inicio</a>
+        <a class="py-2 d-none d-md-inline-block" href="categories.html">Categorías</a>
+        <a class="py-2 d-none d-md-inline-block" href="products.html">Productos</a>
+        <a class="py-2 d-none d-md-inline-block" href="sell.html">Vender</a>
       <div class="btn-group">
         <button id="showEmail" class="py-2 d-none d-md-inline-block dropdown-toggle" type="button" data-toggle="dropdown" style="width: 180px; background-color: #343a40; color: white; border-style: hidden;">
           <script>
             let htmlContentToAppend = "";
             if (localStorage.getItem('usuario') != null) {
               htmlContentToAppend += `
-            <span> ` + localStorage.getItem("usuario") + ` </span>
+            <span> ` + localStorage.getItem("usuario").split('@')[0]; + ` </span>
             `
             }else{
               htmlContentToAppend += `
-            <span> ` + sessionStorage.getItem("usuario") + ` </span>
+            <span> ` + sessionStorage.getItem("usuario").split('@')[0]; + ` </span>
             `
             }
             document.getElementById("showEmail").innerHTML = htmlContentToAppend;
           </script>
         </button>
+  
         <ul class="dropdown-menu">
-          <button class="py-2 d-none d-md-inline-block" style="width: 178px; background-color: white; color: #343a40; border-style: hidden;"><a href="cart.html">Mi Carrito</a></button>
-              <button class="py-2 d-none d-md-inline-block" style="width: 178px; background-color: white; color: #343a40; border-style: hidden;"><a href="my-profile.html">Mi Perfil</a></button>
+          <a href="my-profile.html" class="py-2 d-none d-md-inline-block" style="text-align: center; width: 178px; background-color: white; color: #343a40; border-style: hidden;">Mi perfil</a>
+          <a href="cart.html" class="py-2 d-none d-md-inline-block" style="text-align: center; width: 178px; background-color: white; color: #343a40; border-style: hidden;">Mi carrito</a>
           <button id="cerrarSesion" class="py-2 d-none d-md-inline-block" style="width: 178px; background-color: white; color: #343a40; border-style: hidden;" onclick="cerrar()">Cerrar sesión</button>
         </ul>
       </div>
       </div>
     </nav>
-        <script type="text/javascript">
-          function cerrar(){
-              localStorage.clear();
-              sessionStorage.clear();
-              location.href="login.html";
-           }
-        </script>
-  
-  <div class="container p-5">
+          <script type="text/javascript">
+            function cerrar(){
+                localStorage.clear();
+                sessionStorage.clear();
+                location.href="login.html";
+             }
+          </script>
+          <div class="container p-5">
     <h3 style="text-align: center;">Carrito de compras</h3>
     <h5>Artículos a comprar</h5>
     <table class="table">
@@ -92,14 +141,15 @@
     </table>   
     <hr>
     <br>
-      <form>
-    <h5 class="mb-3">Tipo de envío</h5>
+    <form action="" onsubmit="return false">
+      <h5 class="mb-3">Tipo de envío</h5>
                 <div id="envío"></div>
                 <hr class="mb-4">
                 <div>
                   <h5>Dirección de envío</h5>
                   <div style="display: flex;">
                     <div>
+                      <input type="text" style="display: none;">
                       <label style="font-size: 0.9rem;" for="calle">Calle</label><br>
                       <input style="border: 1px solid lightgray; height: 1.8rem; width: 20rem; border-radius: 0.2rem;" type="text" name="calle" required>
                     </div>
@@ -109,7 +159,7 @@
                     </div>
                   </div><br>
                   <label style="font-size: 0.9rem;" for="esq">Esquina</label><br>
-                  <input style="border: 1px solid lightgray; height: 1.8rem; width: 20rem; border-radius: 0.2rem;" type="text" name="esq" id="" required>
+                  <input style="border: 1px solid lightgray; height: 1.8rem; width: 20rem; border-radius: 0.2rem;" type="text" name="esq" required>
                 </div>
                 <hr class="mb-4">
                 <h5 class="mb-3">Costos</h5>
@@ -133,56 +183,21 @@
                       <strong id="totalCostText"></strong>
                     </li>
                   </ul>
-                <hr class="mb-4">
-                <h5>Forma de pago</h5>
-                <br>
-                <br>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#staticBackdrop">Seleccionar</button></h6> <br>
-                
-                <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                  <div class="modal-dialog">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="staticBackdropLabel">Datos de la tarjeta</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
-                      <div class="modal-body">
-                        <form action="">
-                          <table style="border-collapse: separate; border-spacing: 10px;">
-                            <tr>
-                              <td>Nombre de usuario: <input type="text" id="ccName" required></td>
-                            </tr>
-                          
-                            <tr>
-                              <td>Número de tarjeta: <input type="number" id="ccNumber" required></td>
-                            </tr>
-                          
-                            <tr>
-                              <td>Digito virificador: <input type="number" id="ccCode" required></td>
-                            </tr>
-                          
-                            <tr>
-                              <td>Fecha de vencimiento: <input type="month" id="ccExp" required></td>
-                            </tr>
-                          
-                          </table>
-                        </form>
-                        <br>
-                        <br>
-                        <img src="./img/logos_tarjetascredito1.jpg"  alt="--" width="450" height="50">
-
-                      </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                        <button type="button" id="btnComprar" class="btn btn-primary">Comprar</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                  <!-- Button trigger modal -->
+                  <button class="btn btn-primary btn-lg" id="finalizar" type="submit" data-toggle="modal" data-target="#seleccionarModal">Continuar</button>
               </form>
-            </div>
+              <br>
+              <br>
+              <a type="button" class="btn btn-light btn-lg btn-block" href="products.html">Ver listado de productos</a>
+              <footer class="text-muted">
+                <div class="container">
+                  <p class="float-right">
+                    <a href="#">Volver arriba</a>
+                  </p>
+                  <p>Este sitio forma parte de Desarrollo Web - JAP - 2020</p>
+                  <p>Clickea <a target="_blank" href="Letra.pdf">aquí</a> para descargar la letra del obligatorio.</p>
+                </div>
+              </footer>
     <div id="spinner-wrapper">
       <div class="lds-ring">
         <div></div>
