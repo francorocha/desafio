@@ -13,7 +13,6 @@ document.addEventListener("DOMContentLoaded", function (e) {
     }
 
     document.getElementById("guardarCambios").addEventListener("click", function(){
-        localStorage.setItem("file-upload", document.getElementById("file-upload").value);
         localStorage.setItem("nombres", document.getElementById("nombres").value);
         localStorage.setItem("apellidos", document.getElementById("apellidos").value);
         localStorage.setItem("telefono", document.getElementById("telefono").value);
@@ -21,7 +20,6 @@ document.addEventListener("DOMContentLoaded", function (e) {
      });
      
     if (localStorage.getItem('nombres') != null){
-        document.getElementById("file-upload").value = localStorage.getItem('file-upload');
         document.getElementById("nombres").value = localStorage.getItem('nombres');
         document.getElementById("apellidos").value = localStorage.getItem('apellidos');
         document.getElementById("telefono").value = localStorage.getItem('telefono');
